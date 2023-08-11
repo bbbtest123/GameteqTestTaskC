@@ -3,6 +3,7 @@
     // Model class for offers
     internal class Offer
     {
+        private int _id;
         private bool _forTest;
         private string _name;
         private string _key;
@@ -11,9 +12,10 @@
         private string _group;
         private Group _segments;
 
-        public Offer(string name, string key, bool forTest = true, string category = "",
+        public Offer(string name, string key, int id = 0, bool forTest = true, string category = "",
             List<string>? network = null, string group = "", Group? segments = null)
         {
+            _id = id;
             _name = name ?? "";
             _key = key ?? "";
             _forTest = forTest;
@@ -23,6 +25,7 @@
             _segments = segments ?? new Group();
         }
 
+        public int Id { get => _id; set => _id = value; }
         public bool ForTest { get => _forTest; }
         public string Name { get => _name; }
         public string Key { get => _key; }
@@ -34,13 +37,14 @@
         public override bool Equals(object? obj)
         {
             return obj is Offer offer &&
+                   _id == offer.Id &&
                    _name == offer._name &&
                    _key == offer._key;
         }
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(_name, _key);
+            return HashCode.Combine(_id, _name, _key);
         }
     }
 }

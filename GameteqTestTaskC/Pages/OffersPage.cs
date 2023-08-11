@@ -28,21 +28,18 @@ namespace GameteqTestTaskC.Pages
         // Getting offers as List
         public List<Offer> GetOffers() 
         {
-            List<Offer> offers = new();
+            List<Offer> result = new();
 
-            List<Element> elements = _offersTable.GetChildren(By.XPath(_offersTableRowXPath));
+            List<Element> offers = _offersTable.GetChildren(By.XPath(_offersTableRowXPath));
 
-            foreach (Element element in elements)
+            foreach (Element offer in offers)
             {
-                string name = element.GetChildren(By.XPath(_offersTableCellXPath))[1].Text();
-
-                string key = element.GetChildren(By.XPath(_offersTableCellXPath))[2].Text();
-
-                offers.Add(new Offer(element.GetChildren(By.XPath(_offersTableCellXPath))[1].Text(),
-                                     element.GetChildren(By.XPath(_offersTableCellXPath))[2].Text()));
+                result.Add(new Offer(name: offer.GetChildren(By.XPath(_offersTableCellXPath))[1].Text(),
+                                     key: offer.GetChildren(By.XPath(_offersTableCellXPath))[2].Text(),
+                                     id: int.Parse(offer.GetChildren(By.XPath(_offersTableCellXPath))[0].Text())));
             }
 
-            return offers;
+            return result;
         }
 
         // Creating new offer
@@ -61,35 +58,34 @@ namespace GameteqTestTaskC.Pages
         public OffersPage DeleteOffer(int index)
         {
             int countBefore = _offersTable.GetChildren(By.XPath(_offersTableRowXPath)).Count;
-            Element deleteButton = new(_driver, 
-                                       By.XPath($"({_offersTableXPath + _offersTableRowXPath[1..]})[{index} + 1]" +
+            Element deleteButton = new(driver: _driver,
+                                       locator: By.XPath($"({_offersTableXPath + _offersTableRowXPath[1..]})[{index} + 1]" +
                                                 $"{_offersTableCellXPath[1..]}[4]{_deleteButtonXPath}"));
             deleteButton.Click();
 
-            Element confirmDeleteButton = new(_driver, By.XPath(_confirmDeleteButtonXPath));
+            Element confirmDeleteButton = new(driver: _driver, locator: By.XPath(_confirmDeleteButtonXPath));
 
-            new WebDriverWait(_driver, TimeSpan.FromSeconds(10))
+            new WebDriverWait(driver: _driver, timeout: TimeSpan.FromSeconds(10))
                 .Until(condition => _offersTable.GetChildren(By.XPath(_offersTableRowXPath)).Count == countBefore - 1);
 
             return this;
         }
 
-        // Deleting a first offer with the same name and key as input offer
+        // Deleting an offer with id the same as an input offer id
         public OffersPage DeleteOffer(Offer offer)
         {
             int countBefore = _offersTable.GetChildren(By.XPath(_offersTableRowXPath)).Count;
-            Element deleteButton = new(_driver,
-                                       By.XPath($"{_offersTableXPath + _offersTableRowXPath[1..]}" +
-                                                $"[td[contains(text(), '{offer.Name}')] and " +
-                                                $"td[contains(text(), '{offer.Key}')]]" +
-                                                $"{_offersTableCellXPath[1..]}[4]{_deleteButtonXPath}"));
+            Element deleteButton = new(driver: _driver,
+                                       locator: By.XPath($"({_offersTableXPath + _offersTableRowXPath[1..]})" +
+                                                         $"[td[contains(text(), '{offer.Id}')][1]]" +
+                                                         $"{_offersTableCellXPath[1..]}[4]{_deleteButtonXPath}"));
             deleteButton.Click();
 
-            Element confirmDeleteButton = new(_driver, By.XPath(_confirmDeleteButtonXPath));
+            Element confirmDeleteButton = new(driver: _driver, locator: By.XPath(_confirmDeleteButtonXPath));
 
             confirmDeleteButton.Click();
 
-            new WebDriverWait(_driver, TimeSpan.FromSeconds(10))
+            new WebDriverWait(driver: _driver, timeout: TimeSpan.FromSeconds(10))
                 .Until(condition => _offersTable.GetChildren(By.XPath(_offersTableRowXPath)).Count == countBefore - 1);
 
             return this;
@@ -97,8 +93,8 @@ namespace GameteqTestTaskC.Pages
 
         protected override void InitElements()
         {
-            _offersTable = new Element(_driver, By.XPath(_offersTableXPath));
-            _addButton = new Element(_driver, By.XPath(_addButtonXpath));
+            _offersTable = new Element(driver: _driver, locator: By.XPath(_offersTableXPath));
+            _addButton = new Element(driver: _driver, locator: By.XPath(_addButtonXpath));
         }
     }
 }

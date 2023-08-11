@@ -20,7 +20,7 @@ namespace GameteqTestTaskC.Helpers
 
             try
             {
-                _element = new WebDriverWait(_driver, TimeSpan.FromSeconds(_waitTimeout)).Until(condition => TryFind());
+                _element = new WebDriverWait(driver: _driver, timeout: TimeSpan.FromSeconds(_waitTimeout)).Until(condition => TryFind());
             }
             catch (WebDriverTimeoutException)
             {
@@ -43,7 +43,8 @@ namespace GameteqTestTaskC.Helpers
         {
             try
             {
-                _element = new WebDriverWait(_driver, TimeSpan.FromSeconds(_waitTimeout)).Until(condition => TryFind());
+                _element = new WebDriverWait(driver: _driver, timeout: TimeSpan.FromSeconds(_waitTimeout))
+                    .Until(condition => TryFind());
                 return true;
             }
             catch (WebDriverTimeoutException)
@@ -137,7 +138,8 @@ namespace GameteqTestTaskC.Helpers
             {
                 try
                 {
-                    _element = new WebDriverWait(_driver, TimeSpan.FromSeconds(_waitTimeout)).Until(condition => TryFind());
+                    _element = new WebDriverWait(driver: _driver, timeout: TimeSpan.FromSeconds(_waitTimeout))
+                        .Until(condition => TryFind());
                     action();
                 }
                 catch (NullReferenceException)
@@ -157,7 +159,8 @@ namespace GameteqTestTaskC.Helpers
             {
                 try
                 {
-                    _element = new WebDriverWait(_driver, TimeSpan.FromSeconds(_waitTimeout)).Until(condition => TryFind());
+                    _element = new WebDriverWait(driver: _driver, timeout: TimeSpan.FromSeconds(_waitTimeout))
+                        .Until(condition => TryFind());
                     action(actionInput);
                 }
                 catch (NullReferenceException)
@@ -177,7 +180,8 @@ namespace GameteqTestTaskC.Helpers
             {
                 try
                 {
-                    _element = new WebDriverWait(_driver, TimeSpan.FromSeconds(_waitTimeout)).Until(condition => TryFind());
+                    _element = new WebDriverWait(driver: _driver, timeout: TimeSpan.FromSeconds(_waitTimeout))
+                        .Until(condition => TryFind());
                     return func();
                 }
                 catch (NullReferenceException)
@@ -197,7 +201,8 @@ namespace GameteqTestTaskC.Helpers
             {
                 try
                 {
-                    _element = new WebDriverWait(_driver, TimeSpan.FromSeconds(_waitTimeout)).Until(condition => TryFind());
+                    _element = new WebDriverWait(driver: _driver, timeout: TimeSpan.FromSeconds(_waitTimeout))
+                        .Until(condition => TryFind());
                     return func(funcInput);
                 }
                 catch (NullReferenceException)
@@ -217,7 +222,8 @@ namespace GameteqTestTaskC.Helpers
             {
                 try
                 {
-                    _element = new WebDriverWait(_driver, TimeSpan.FromSeconds(_waitTimeout)).Until(condition => TryFind());
+                    _element = new WebDriverWait(driver: _driver, timeout: TimeSpan.FromSeconds(_waitTimeout))
+                        .Until(condition => TryFind());
                     return func(funcInput);
                 }
                 catch (NullReferenceException)
@@ -237,7 +243,8 @@ namespace GameteqTestTaskC.Helpers
             {
                 try
                 {
-                    _element = new WebDriverWait(_driver, TimeSpan.FromSeconds(_waitTimeout)).Until(condition => TryFind());
+                    _element = new WebDriverWait(driver: _driver, timeout: TimeSpan.FromSeconds(_waitTimeout))
+                        .Until(condition => TryFind());
                     return func(funcInput);
                 }
                 catch (NullReferenceException)
@@ -274,12 +281,12 @@ namespace GameteqTestTaskC.Helpers
             var elements = _element.FindElements(By.XPath(xpath));
 
             result.AddRange(from IWebElement element in elements
-                            select new Element(_driver,
-                                               By.XPath($"({_locator.Criteria + xpath[1..]})[{elements.IndexOf(element) + 1}]"),
-                                               _waitTimeout));
+                            select new Element(driver: _driver,
+                                               locator: By.XPath($"({_locator.Criteria + xpath[1..]})[{elements.IndexOf(element) + 1}]"),
+                                               waitTimeout: _waitTimeout));
             return result;
         }
         private Element GetChildFunc(string xpath) => 
-            new(_driver, By.XPath(_locator.Criteria + xpath[1..]), _waitTimeout);
+            new(driver: _driver, locator: By.XPath(_locator.Criteria + xpath[1..]), waitTimeout: _waitTimeout);
     }
 }

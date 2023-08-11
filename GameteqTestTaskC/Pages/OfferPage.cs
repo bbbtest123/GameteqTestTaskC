@@ -177,16 +177,16 @@ namespace GameteqTestTaskC.Pages
         public OfferPage AddCategory(string category)
         {
             // Category options count to manage waits
-            int countBefore = _categorySelect.GetChildren(By.XPath(_categoryOptionsXpath)).Count();
+            int countBefore = _categorySelect.GetChildren(By.XPath(_categoryOptionsXpath)).Count;
 
             _categoryAddButton.Click();
 
             CreateNewEntity(category);
 
             // Waiting until category options count increases
-            new WebDriverWait(_driver, TimeSpan.FromSeconds(10))
+            new WebDriverWait(driver: _driver, timeout: TimeSpan.FromSeconds(10))
                 .Until(condition =>
-                       _categorySelect.GetChildren(By.XPath(_categoryOptionsXpath)).Count() == countBefore + 1);
+                       _categorySelect.GetChildren(By.XPath(_categoryOptionsXpath)).Count == countBefore + 1);
 
             return this;
         }
@@ -196,7 +196,7 @@ namespace GameteqTestTaskC.Pages
         { 
             _networksSelect.Click();
 
-            Element overlayContainer = new Element(_driver, By.XPath(_overlayContainerXPath));
+            Element overlayContainer = new(driver: _driver, locator: By.XPath(_overlayContainerXPath));
 
             List<Element>? networkOptions = overlayContainer.GetChildren(By.XPath(_matOptionXPath));
 
@@ -217,15 +217,15 @@ namespace GameteqTestTaskC.Pages
                     // Selecting networks from options with the same name as a network to select
                     var networkElementsWithText =
                         from Element networkOption in networkOptions
-                        where new Element(_driver, 
-                                          By.XPath(networkOption.LocatorCriteria() + _matOptionTextXPath[1..]))
+                        where new Element(driver: _driver,
+                                          locator: By.XPath(networkOption.LocatorCriteria() + _matOptionTextXPath[1..]))
                             .Text() == capitalized
                         && !networksToSelect.Contains(networkOption)
                         select networkOption;
 
                     // If no network options with such text exist, adding it to a list to add later.
                     // Otherwise adding the first one to a list to select later
-                    if (networkElementsWithText.Count() == 0)
+                    if (!networkElementsWithText.Any())
                     {
                         missingNetworks.Add(network);
                     }
@@ -237,10 +237,10 @@ namespace GameteqTestTaskC.Pages
             }
 
             // If there are missing networks
-            if (missingNetworks.Count() > 0)
+            if (missingNetworks.Count > 0)
             {
                 // A count of networks
-                int countBefore = networkOptions.Count();
+                int countBefore = networkOptions.Count;
 
                 // Sending Escape key to hide network options
                 _builder.SendKeys(Keys.Escape).Perform();
@@ -248,21 +248,21 @@ namespace GameteqTestTaskC.Pages
                 // Adding missing networks
                 AddNetworks(missingNetworks);
 
-                Element networksSelect = new Element(_driver, By.XPath(_networksSelectXPath));
+                Element networksSelect = new(driver: _driver, locator: By.XPath(_networksSelectXPath));
 
                 // Clicking on the network selection element
                 networksSelect.Click();
 
-                Element overlayContainerAfter = new Element(_driver, By.XPath(_overlayContainerXPath));
+                Element overlayContainerAfter = new(driver: _driver, locator: By.XPath(_overlayContainerXPath));
                 
                 // A count of networks after addition
-                int countAfter = overlayContainerAfter.GetChildren(By.XPath(_matOptionXPath)).Count();
+                int countAfter = overlayContainerAfter.GetChildren(By.XPath(_matOptionXPath)).Count;
 
                 // Wait until networks are actually added
-                new WebDriverWait(_driver, TimeSpan.FromSeconds(10))
+                new WebDriverWait(driver: _driver, timeout: TimeSpan.FromSeconds(10))
                     .Until(condition =>
-                           overlayContainerAfter.GetChildren(By.XPath(_matOptionXPath)).Count() ==
-                           countBefore + missingNetworks.Count());
+                           overlayContainerAfter.GetChildren(By.XPath(_matOptionXPath)).Count ==
+                           countBefore + missingNetworks.Count);
 
                 // Calling this method again
                 SelectNetworks(networks);
@@ -301,7 +301,7 @@ namespace GameteqTestTaskC.Pages
             {
                 _groupSelect.Click();
 
-                Element overlayContainer = new Element(_driver, By.XPath(_overlayContainerXPath));
+                Element overlayContainer = new(driver: _driver, locator: By.XPath(_overlayContainerXPath));
 
                 // Geting a list of group options
                 // Thread.Sleep(TimeSpan.FromMilliseconds(100));
@@ -313,7 +313,8 @@ namespace GameteqTestTaskC.Pages
                 // Iterating over options and selecting one with desired text
                 foreach (Element groupOption in groupOptions)
                 {
-                    Element groupTextSpan = new(_driver, By.XPath(groupOption.LocatorCriteria() + _matOptionTextXPath[1..]));
+                    Element groupTextSpan = new(driver: _driver,
+                                                locator: By.XPath(groupOption.LocatorCriteria() + _matOptionTextXPath[1..]));
                     if (groupTextSpan.Text() == groupName)
                     {
                         groupOption.Click();
@@ -347,7 +348,7 @@ namespace GameteqTestTaskC.Pages
         // A public method for adding groups/segments
         public OfferPage AddSegments(Group group)
         {
-            AddSegments(group, new(_driver, By.XPath("/" + _segmentFormXPath)));
+            AddSegments(group: group, thisElement: new Element(driver: _driver, locator: By.XPath("/" + _segmentFormXPath)));
 
             return this;
         }
@@ -358,13 +359,13 @@ namespace GameteqTestTaskC.Pages
             // Selecting correct connective for the group
             if (group.Connective == Connective.Or)
             {
-                Element orRadioButton = new(_driver, By.XPath(thisElement.LocatorCriteria() +
+                Element orRadioButton = new(driver: _driver, locator: By.XPath(thisElement.LocatorCriteria() +
                                                               _matCardTitleXPath + _orButtonXpath));
                 orRadioButton.Click();
             }
             else
             {
-                Element andRadioButton = new(_driver, By.XPath(thisElement.LocatorCriteria() +
+                Element andRadioButton = new(driver: _driver, By.XPath(thisElement.LocatorCriteria() +
                                                                _matCardTitleXPath + _andButtonXpath));
                 andRadioButton.Click();
             }
@@ -374,7 +375,9 @@ namespace GameteqTestTaskC.Pages
             // Otherwise selected values are discarded on pressing 'Add segment' button
             foreach (string segment in group.SegmentsValues)
             {
-                Element addSegmentForGroupButton = new(_driver, By.XPath(thisElement.LocatorCriteria() + _addSegmentForGroupButtonXpath));
+                Element addSegmentForGroupButton = new(driver: _driver, 
+                                                       locator: By.XPath(thisElement.LocatorCriteria() +
+                                                           _addSegmentForGroupButtonXpath));
 
                 addSegmentForGroupButton.Click();
             }
@@ -388,22 +391,23 @@ namespace GameteqTestTaskC.Pages
             // Iterating over children groups and adding them recursively
             foreach (Group childGroup in group.Groups)
             {
-                Element addGroupButton = new(_driver, By.XPath(thisElement.LocatorCriteria() + 
+                Element addGroupButton = new(driver: _driver, locator: By.XPath(thisElement.LocatorCriteria() +
                                                                _addGroupButtonXpath));
 
                 addGroupButton.Click();
 
-                AddSegments(childGroup, new Element(_driver, By.XPath("(" + thisElement.LocatorCriteria() +
-                                                                      _groupContentXpath 
-                                                                      + _segmentFormXPath + ")" +
-                                                                      $"[{group.Groups.IndexOf(childGroup) + 1}]")));
+                AddSegments(group: childGroup,
+                            thisElement: new Element(driver: _driver,
+                                                     locator: By.XPath("(" + thisElement.LocatorCriteria() 
+                                                         + _groupContentXpath + _segmentFormXPath
+                                                         + ")" + $"[{group.Groups.IndexOf(childGroup) + 1}]")));
             }
         }
 
         // Adding new segment value
         private OfferPage AddSegmentValue(string segment)
         {
-            Element addSegmentButton = new(_driver, By.XPath(_addSegmentButtonXpath));
+            Element addSegmentButton = new(driver: _driver, locator: By.XPath(_addSegmentButtonXpath));
             addSegmentButton.Click();
 
             CreateNewEntity(segment);
@@ -417,11 +421,13 @@ namespace GameteqTestTaskC.Pages
             if (segment.Length > 0)
             {
                 Element segmentSelect =
-                    new(_driver, By.XPath($"({parent.LocatorCriteria() + _groupContentXpath + _segmentValueSelectXPath})[{index + 1}]"));
+                    new(driver: _driver,
+                        locator: By.XPath($"({parent.LocatorCriteria() + _groupContentXpath}" +
+                            $"{_segmentValueSelectXPath})[{index + 1}]"));
                 
                 segmentSelect.Click();
 
-                Element overlayContainer = new Element(_driver, By.XPath(_overlayContainerXPath));
+                Element overlayContainer = new(driver: _driver, locator: By.XPath(_overlayContainerXPath));
 
                 // Segment options list
                 List<Element> segmentOptions = overlayContainer.GetChildren(By.XPath(_matOptionXPath));
@@ -435,7 +441,9 @@ namespace GameteqTestTaskC.Pages
                 // Iterating over segment options and selecting one
                 foreach (Element segmentOption in segmentOptions)
                 {
-                    Element segmentTextSpan = new(_driver, By.XPath(segmentOption.LocatorCriteria() + _matOptionTextXPath[1..]));
+                    Element segmentTextSpan = new(driver: _driver, 
+                                                  locator: By.XPath(segmentOption.LocatorCriteria() +
+                                                      _matOptionTextXPath[1..]));
 
                     if (segmentTextSpan.Text() == capitalized)
                     {
@@ -459,14 +467,15 @@ namespace GameteqTestTaskC.Pages
         // Creating new entity through a dialog
         public OfferPage CreateNewEntity(string value)
         {
-            Element newEntityInput = new(_driver, By.XPath(_newEntityInputXPath));
+            Element newEntityInput = new(driver: _driver, locator: By.XPath(_newEntityInputXPath));
             newEntityInput.SendKeys(value);
 
-            Element newEntityCreateButton = new(_driver, By.XPath(_newEntityCreateButtonXPath));
+            Element newEntityCreateButton = new(driver: _driver, locator: By.XPath(_newEntityCreateButtonXPath));
             newEntityCreateButton.Click();
 
             // It's necessary to wait until creation dialog is closed
-            new WebDriverWait(_driver, TimeSpan.FromSeconds(10)).Until(condition => newEntityInput.IsExistsWithoutWait() == false);
+            new WebDriverWait(driver: _driver, timeout: TimeSpan.FromSeconds(10))
+                .Until(condition => newEntityInput.IsExistsWithoutWait() == false);
 
             return this;
         }
@@ -474,12 +483,13 @@ namespace GameteqTestTaskC.Pages
         // Pressing Save button
         public void PressSave()
         {
-            Element saveButton = new(_driver, By.XPath(_saveButtonXpath));
+            Element saveButton = new(driver: _driver, locator: By.XPath(_saveButtonXpath));
 
             try
             {
                 // It's necessary to wait until Save button become enabled
-                new WebDriverWait(_driver, TimeSpan.FromSeconds(2)).Until(condition => saveButton.GetAttribute("disabled") != "true");
+                new WebDriverWait(driver: _driver, timeout: TimeSpan.FromSeconds(2))
+                    .Until(condition => saveButton.GetAttribute("disabled") != "true");
             }
             catch (WebDriverTimeoutException)
             {
@@ -492,9 +502,7 @@ namespace GameteqTestTaskC.Pages
         // Checking if Save button is disabled
         public bool IsSaveButtonDisabled()
         {
-            Element saveButton = new(_driver, By.XPath(_saveButtonXpath));
-
-            bool result = saveButton.GetAttribute("disabled") != "true";
+            Element saveButton = new(driver: _driver, locator: By.XPath(_saveButtonXpath));
 
             return saveButton.GetAttribute("disabled") == "true";
         }
@@ -502,18 +510,18 @@ namespace GameteqTestTaskC.Pages
         // Initing initial elements
         protected override void InitElements()
         {
-            _forTestsCheckbox = new Element(_driver, By.XPath(_forTestsCheckboxXPath));
-            _forTestsCheckboxInput = new Element(_driver, By.XPath(_forTestsCheckboxInputXPath));
+            _forTestsCheckbox = new Element(driver: _driver, locator: By.XPath(_forTestsCheckboxXPath));
+            _forTestsCheckboxInput = new Element(driver: _driver, locator: By.XPath(_forTestsCheckboxInputXPath));
 
-            _nameInput = new Element(_driver, By.XPath(_nameInputXPath));
-            _keyInput = new Element(_driver, By.XPath(_keyInputXPath));
+            _nameInput = new Element(driver: _driver, locator: By.XPath(_nameInputXPath));
+            _keyInput = new Element(driver: _driver, locator: By.XPath(_keyInputXPath));
 
-            _categorySelect = new Element(_driver, By.XPath(_categorySelectXPath));
-            _categoryAddButton = new Element(_driver, By.XPath(_categoryAddButtonXPath));
-            _networksSelect = new Element(_driver, By.XPath(_networksSelectXPath));
-            _networkAddButton = new Element(_driver, By.XPath(_networkAddButtonXPath));
-            _groupSelect = new Element(_driver, By.XPath(_groupSelectXPath));
-            _groupAddButton = new Element(_driver, By.XPath(_groupAddButtonXPath));
+            _categorySelect = new Element(driver: _driver, locator: By.XPath(_categorySelectXPath));
+            _categoryAddButton = new Element(driver: _driver, locator: By.XPath(_categoryAddButtonXPath));
+            _networksSelect = new Element(driver: _driver, locator: By.XPath(_networksSelectXPath));
+            _networkAddButton = new Element(driver: _driver, locator: By.XPath(_networkAddButtonXPath));
+            _groupSelect = new Element(driver: _driver, locator: By.XPath(_groupSelectXPath));
+            _groupAddButton = new Element(driver: _driver, locator: By.XPath(_groupAddButtonXPath));
 
             _builder = new(_driver);
         }

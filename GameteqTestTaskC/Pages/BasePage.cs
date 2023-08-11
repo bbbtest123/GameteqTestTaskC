@@ -17,7 +17,7 @@ namespace GameteqTestTaskC.Pages
 
             _menu = new MenuModule(driver);
 
-            var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+            WebDriverWait wait = new(driver: driver, timeout: TimeSpan.FromSeconds(10));
 
             InitElements();
             

@@ -26,8 +26,8 @@ namespace GameteqTestTaskC.Modules
         {
             _driver = driver;
 
-            _menuToggle = new Element(_driver, By.XPath(_menuToggleXPath));
-            _menuInput = new Element(_driver, By.XPath(_menuInputXPath));
+            _menuToggle = new Element(driver: _driver, locator: By.XPath(_menuToggleXPath));
+            _menuInput = new Element(driver: _driver, locator: By.XPath(_menuInputXPath));
         }
 
         // Toggling the menu
@@ -37,15 +37,15 @@ namespace GameteqTestTaskC.Modules
             {
                 _menuToggle.Click();
 
-                Element menuSideNav = new(_driver, By.XPath(_menuSideNavXPath));
+                Element menuSideNav = new(driver: _driver, locator: By.XPath(_menuSideNavXPath));
 
                 string classString = menuSideNav.GetAttribute("class");
 
-                new WebDriverWait(_driver, TimeSpan.FromSeconds(10))
+                new WebDriverWait(driver: _driver, timeout: TimeSpan.FromSeconds(10))
                     .Until(condition => menuSideNav.GetAttribute("class").Contains("mat-drawer-opened"));
 
-                _dashboardButton = new Element(_driver, By.XPath(_dashboardButtonXPath));
-                _offersButton = new Element(_driver, By.XPath(_offersButtonXPath));
+                _dashboardButton = new Element(driver: _driver, locator: By.XPath(_dashboardButtonXPath));
+                _offersButton = new Element(driver: _driver, locator: By.XPath(_offersButtonXPath));
             }
         }
 

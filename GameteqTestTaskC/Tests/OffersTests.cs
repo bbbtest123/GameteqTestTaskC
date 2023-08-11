@@ -35,92 +35,92 @@ namespace GameteqTestTaskC.Tests
 
         private Offer SampleOffer()
         {
-            return new Offer("test_name1", "test_key1", true, "test_category1",
-                             new List<string>()
+            return new Offer(name: "test_name1", key: "test_key1", id: 0, forTest: true, category: "test_category1",
+                             network: new List<string>()
                                  { "test_network1" },
-                             "test_group1",
-                             new Group(Connective.And,
-                                       new List<string>()
-                                       { "test_segment1" },
-                                       new List<Group>()));
+                             group: "test_group1",
+                             segments: new Group(connective: Connective.And,
+                                                 segmentsValues: new List<string>()
+                                                     { "test_segment1" },
+                                                 groups: new List<Group>()));
         }
 
         private static IEnumerable<TestCaseData> OffersDataPositive()
         {
-            yield return new TestCaseData(new Offer("test_name1", "test_key1", true, "test_category_a2",
-                                                    new List<string>()
+            yield return new TestCaseData(new Offer(name: "test_name1", key: "test_key1", id: 0, forTest: true, category: "test_category_a2",
+                                                    network: new List<string>()
                                                     {
                                                         "test_network_a3",
                                                         "test_network_a4"
                                                     },
-                                                    "test_group_a2",
-                                                    new Group(Connective.And,
-                                                              new List<string>()
-                                                              {
-                                                                  "test_segment_a5",
-                                                                  "test_segment_a6"
-                                                              },
-                                                              new List<Group>()
-                                                              { 
-                                                                  new Group(Connective.Or,
-                                                                            new List<string>()
-                                                                            {
-                                                                                "test_segment_a5",
-                                                                                "test_segment_a6"
-                                                                            },
-                                                                            new List<Group>())
-                                                              })));
+                                                    group: "test_group_a2",
+                                                    segments: new Group(connective: Connective.And,
+                                                                        segmentsValues: new List<string>()
+                                                                        {
+                                                                            "test_segment_a5",
+                                                                            "test_segment_a6"
+                                                                        },
+                                                                        groups: new List<Group>()
+                                                                        { 
+                                                                            new Group(Connective.Or,
+                                                                                      new List<string>()
+                                                                                      {
+                                                                                          "test_segment_a5",
+                                                                                          "test_segment_a6"
+                                                                                      },
+                                                                                      new List<Group>())
+                                                                         })));
             
         }
 
         private static IEnumerable<TestCaseData> OffersDataNegative()
         {
-            yield return new TestCaseData(new Offer("", "test_key1", true, "test_category1",
-                                                    new List<string>() 
-                                                        { "test_network1" }, 
-                                                    "test_group1", 
-                                                    new Group(Connective.And,
-                                                              new List<string>()
-                                                              { "test_segment1" },
-                                                              new List<Group>())));
-            yield return new TestCaseData(new Offer("test_name1", "", true, "test_category1",
-                                                    new List<string>()
+            yield return new TestCaseData(new Offer(name: "", key: "test_key1", id: 0, forTest: true, category: "test_category1",
+                                                    network: new List<string>() 
                                                         { "test_network1" },
-                                                    "test_group1",
-                                                    new Group(Connective.And,
-                                                              new List<string>()
-                                                              { "test_segment1" },
-                                                              new List<Group>())));
-            yield return new TestCaseData(new Offer("test_name1", "test_key1", true, "",
-                                                    new List<string>()
+                                                    group: "test_group1",
+                                                    segments: new Group(connective: Connective.And,
+                                                                        segmentsValues: new List<string>()
+                                                                            { "test_segment1" },
+                                                                        groups: new List<Group>())));
+            yield return new TestCaseData(new Offer(name: "test_name1", key: "", id: 0, forTest: true, category: "test_category1",
+                                                    network: new List<string>()
                                                         { "test_network1" },
-                                                    "test_group1",
-                                                    new Group(Connective.And,
-                                                              new List<string>()
-                                                              { "test_segment1" },
-                                                              new List<Group>())));
-            yield return new TestCaseData(new Offer("test_name1", "test_key1", true, "test_category1",
-                                                    new List<string>(),
-                                                    "test_group1",
-                                                    new Group(Connective.And,
-                                                              new List<string>()
-                                                              { "test_segment1" },
-                                                              new List<Group>())));
-            yield return new TestCaseData(new Offer("test_name1", "test_key1", true, "test_category1",
-                                                    new List<string>()
+                                                    group: "test_group1",
+                                                    segments: new Group(connective: Connective.And,
+                                                                        segmentsValues: new List<string>()
+                                                                            { "test_segment1" },
+                                                                        groups: new List<Group>())));
+            yield return new TestCaseData(new Offer(name: "test_name1", key: "test_key1", id: 0, forTest: true, category: "",
+                                                    network: new List<string>()
                                                         { "test_network1" },
-                                                    "",
-                                                    new Group(Connective.And,
-                                                              new List<string>()
-                                                              { "test_segment1" },
-                                                              new List<Group>())));
-            yield return new TestCaseData(new Offer("test_name1", "test_key1", true, "test_category1",
-                                                    new List<string>()
+                                                    group: "test_group1",
+                                                    segments: new Group(connective: Connective.And,
+                                                                        segmentsValues: new List<string>()
+                                                                            { "test_segment1" },
+                                                                        groups: new List<Group>())));
+            yield return new TestCaseData(new Offer(name: "test_name1", key: "test_key1", id: 0, forTest: true, category: "test_category1",
+                                                    network: new List<string>(),
+                                                    group: "test_group1",
+                                                    segments: new Group(connective: Connective.And,
+                                                                        segmentsValues: new List<string>()
+                                                                            { "test_segment1" },
+                                                                        groups: new List<Group>())));
+            yield return new TestCaseData(new Offer(name: "test_name1", key: "test_key1", id: 0, forTest: true, category: "test_category1",
+                                                    network: new List<string>()
                                                         { "test_network1" },
-                                                    "test_group1",
-                                                    new Group(Connective.And,
-                                                              new List<string>(),
-                                                              new List<Group>())));
+                                                    group: "",
+                                                    segments: new Group(connective: Connective.And,
+                                                                        segmentsValues: new List<string>()
+                                                                            { "test_segment1" },
+                                                                        groups: new List<Group>())));
+            yield return new TestCaseData(new Offer(name: "test_name1", key: "test_key1", id: 0, forTest: true, category: "test_category1",
+                                                    network: new List<string>()
+                                                        { "test_network1" },
+                                                    group: "test_group1",
+                                                    segments: new Group(connective: Connective.And,
+                                                                        segmentsValues: new List<string>(),
+                                                                        groups: new List<Group>())));
         }
 
         [Test, TestCaseSource(nameof(OffersDataPositive))]
@@ -137,6 +137,8 @@ namespace GameteqTestTaskC.Tests
             OffersPage offersPageAfter = new(_driver);
 
             List<Offer> afterOffers = offersPageAfter.GetOffers();
+
+            offerToAdd.Id = afterOffers.Max(obj => obj.Id);
 
             beforeOffers.Add(offerToAdd);
 

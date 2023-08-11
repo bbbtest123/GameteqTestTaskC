@@ -19,7 +19,7 @@ namespace GameteqTestTaskC.Pages
 
         protected override void InitElements()
         {
-            _dashboard = new Element(_driver, By.XPath(_dashboardXPath));
+            _dashboard = new Element(driver: _driver, locator: By.XPath(_dashboardXPath));
         }
     }
 }
