@@ -2,7 +2,7 @@ Solution for the test task from GAMETEQ using C# and NUnit.
 
 Run tests:
 ```
-dotnet tests
+dotnet test
 ```
 
 The task:
